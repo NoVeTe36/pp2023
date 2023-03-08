@@ -159,6 +159,18 @@ class Student_Management(Student, Course):
                     student_id.sort()
                     print(student_id)
                     count_st = 0
+                    # check if student ID is in course list
+                    for i in range(0, len(Course.course_list)):
+                        if course in Course.course_list[i]['ID: ']:
+                            for j in range(0, len(student_id)):
+                                if 'Student: ' in Course.course_list[i]:
+                                    for k in range(0, len(Course.course_list[i]['Student: '])):
+                                        for l in range(0, len(student_id)):
+                                            if student_id[l] == Course.course_list[i]['Student: '][k]:
+                                                student_id.remove(student_id[l])
+                                                print("Student ID already in course")
+                                                break
+                    # add student ID to course list
                     for i in range(0, len(Course.course_list)):
                         if Course.course_list[i]['ID: '] == course:
                             for j in range(0, len(student_id)):
@@ -166,13 +178,13 @@ class Student_Management(Student, Course):
                                     if student_id[j] == Student.student_list[k]['ID: ']:
                                         count_st += 1
                                         break
-                            if count_st != 0:
-                                if 'Student: ' in Course.course_list[i].keys():
-                                    Course.course_list[i]['Student: '][j].append(student_id[j])
-                                else:
-                                    Course.course_list[i]['Student: '] = [student_id[j]]
-                                Course.course_list[i]['Student: '][j].sort()
-                        print("Student has been added\n")
+                                if count_st != 0:
+                                    if 'Student: ' in Course.course_list[i].keys():
+                                        Course.course_list[i]['Student: '].append(student_id[j])
+                                    else:
+                                        Course.course_list[i]['Student: '] = [student_id[j]]
+                                    Course.course_list[i]['Student: '].sort()
+                            print("Student has been added\n")
 
                     #add course ID, credits as a dict to student
                     for i in range(0, len(Course.course_list)):
@@ -198,24 +210,28 @@ class Student_Management(Student, Course):
         for i in range(0, len(Course.course_list)):
             print(Course.course_list[i])
         course = input("Enter course ID: ")
+        count_course = 0
         print("List of student:")
         for i in range(0, len(Course.course_list)):
-            if course == Course.course_list[i]['ID: ']:
+            if course in Course.course_list[i]['ID: ']:
                 for j in range(0, len(Course.course_list[i]['Student: '])):
                     print(Course.course_list[i]['Student: '][j])
-        student_id = input("Enter student ID you want to remove: ")
-        student_id = student_id.split()
-        student_id.sort()
-        count = 0
-        for i in range(0, len(Course.course_list)):
-            if Course.course_list[i]['ID: '] == course:
-                count += 1
-                if 'Student :' in Course.course_list[i]:
-                    Course.course_list[i]['Student: '].remove(student_id)
-                    print("Student has been removed\n")
-                    break
-        if count == 0:
-                print("Student not found\n")
+                    count_course += 1
+        if count_course == 0:
+            print("No student in this course")
+        else:
+            student_id = input("Enter student ID you want to remove: ")
+            student_id = student_id.split()
+            student_id.sort()
+            for i in range(0, len(Course.course_list)):
+                if course in Course.course_list[i]['ID: ']:
+                    for j in range(0, len(student_id)):
+                        if 'Student: ' in Course.course_list[i]:
+                            for k in range(0, len(Course.course_list[i]['Student: '])):
+                                    if student_id[j] == Course.course_list[i]['Student: '][k]:
+                                        print(f"Student {student_id} has been removed")
+                                        Course.course_list[i]['Student: '].remove(student_id[j])
+                                        break
         print(tabulate(Course.course_list, headers="keys", tablefmt="fancy_grid", numalign= "center", stralign= "center"))
     
     def insert_mark_to_student():
