@@ -78,45 +78,43 @@ class StudentManagement(Student, Course):
         # print the student list and ask for student id to modify
         stdscr.clear()
         stdscr.addstr(1, 2, "Modify Student")
-        table = tabulate(self.student_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
-        stdscr.addstr(4, 0, table)
-        table_height = len(self.student_list) + 10
-        stdscr.addstr(table_height, 2, "Enter student ID to modify: ")
+        student_table = tabulate(self.student_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
+        stdscr.addstr(3, 0, student_table)
+        table_height = 2
+        for i in range(0, len(self.student_list)): 
+            for j in range(0, len(self.student_list[i])):
+                table_height += 1
+        stdscr.addstr(2, 2, "Enter student ID to modify: ")
         id = stdscr.getstr().decode()
-        stdscr.addstr(table_height + 2, 2, "Press any key to continue")
-        stdscr.refresh()
-        stdscr.getch()
-        stdscr.clear()
         # find the student id in the student list
         for i in range(0, len(self.student_list)):
             if self.student_list[i]["ID"] == id:
-                stdscr.addstr(1, 2, "Modify Student")
+                stdscr.addstr(table_height + 4, 2, "Modify Student")
                 # modify all the information of the student
-                stdscr.addstr(3, 2, "Enter new student ID: ")
+                stdscr.addstr(table_height + 5, 2, "Enter new student ID: ")
                 id = stdscr.getstr().decode()
-                stdscr.addstr(4, 2, "Enter new student name: ")
+                stdscr.addstr(table_height + 6, 2, "Enter new student name: ")
                 name = stdscr.getstr().decode()
-                stdscr.addstr(5, 2, "Enter new student dob: ")
+                stdscr.addstr(table_height + 7, 2, "Enter new student dob: ")
                 dob = stdscr.getstr().decode()
                 self.student_list[i]["ID"] = id
                 self.student_list[i]["Name"] = name
                 self.student_list[i]["DOB"] = dob
-                stdscr.addstr(6, 2, f"Student {name} modified")
-                stdscr.addstr(7, 2, "Press any key to continue")
+                stdscr.addstr(table_height + 9, 2, f"Student {name} modified")
+                stdscr.addstr(table_height + 10, 2, "Press any key to continue")
                 stdscr.refresh()
                 stdscr.getch()
                 stdscr.clear()
                 break
             elif i == len(self.student_list) - 1:
-                stdscr.addstr(4, 2, "*** Student ID not found ***")
-                stdscr.addstr(5, 2, "Press any key to continue")
+                stdscr.addstr(table_height + 4, 2, "*** Student ID not found ***")
+                stdscr.addstr(table_height+ 5, 2, "Press any key to continue")
                 stdscr.refresh()
                 stdscr.getch()
                 stdscr.clear()
         
     def print_student(self, stdscr):
         stdscr.clear()
-        stdscr = curses.initscr()
         stdscr.addstr(1, 0, "Press any key to continue")
         data = tabulate(self.student_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
         stdscr.addstr(3, 0, data)
@@ -163,58 +161,187 @@ class StudentManagement(Student, Course):
                 stdscr.addstr(8, 2, "Press any key to continue")
         self.course_list.sort(key = lambda x: x["ID"])
     
-    def modify_course(self, stdscr):
-        # print the course list and ask for course id to modify
-        stdscr.addstr(1, 2, "Modify Course")
-        stdscr.addstr(3, 2, "Enter course ID to modify: ")
-        id = stdscr.getstr().decode()
-        stdscr.addstr(4, 2, "Press any key to continue")
+    def print_course(self, stdscr):
+        stdscr.clear()
+        stdscr.addstr(1, 0, "Press any key to continue")
+        data = tabulate(self.course_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
+        stdscr.addstr(3, 0, data)
         stdscr.refresh()
         stdscr.getch()
         stdscr.clear()
+    
+    def modify_course(self, stdscr):
+        stdscr.clear()
+        # print the course list and ask for course id to modify
+        stdscr.addstr(1, 2, "Modify Course")
+        course_table = tabulate(self.course_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
+        stdscr.addstr(3, 0, course_table)
+        table_height = 2
+        for i in range(0, len(self.course_list)): 
+            for j in range(0, len(self.course_list[i])):
+                table_height += 1
+        stdscr.addstr(table_height + 3, 2, "Enter course ID to modify: ")
+        id = stdscr.getstr().decode()
         # find the course id in the course list
         for i in range(0, len(self.course_list)):
             if self.course_list[i]["ID"] == id:
-                stdscr.addstr(1, 2, "Modify Course")
+                stdscr.addstr(table_height + 4, 2, "Modify Course")
                 # modify all the information of the course
-                stdscr.addstr(3, 2, "Enter new course ID: ")
+                stdscr.addstr(table_height + 5, 2, "Enter new course ID: ")
                 id = stdscr.getstr().decode()
-                stdscr.addstr(4, 2, "Enter new course name: ")
+                stdscr.addstr(table_height + 6, 2, "Enter new course name: ")
                 name = stdscr.getstr().decode()
-                stdscr.addstr(5, 2, "Enter new course credit: ")
+                stdscr.addstr(table_height + 7, 2, "Enter new course credit: ")
                 credit = stdscr.getstr().decode()
                 self.course_list[i]["ID"] = id
                 self.course_list[i]["Name"] = name
                 self.course_list[i]["Credit"] = credit
-                stdscr.addstr(6, 2, f"Course {name} modified")
+                stdscr.addstr(table_height + 8, 2, f"Course {name} modified")
                 self.student_list.sort(key = lambda x: x["ID"])
-                stdscr.addstr(7, 2, "Press any key to continue")
+                stdscr.addstr(table_height + 9, 2, "Press any key to continue")
                 stdscr.refresh()
                 stdscr.getch()
                 stdscr.clear()
                 break
             elif i == len(self.course_list) - 1:
-                stdscr.addstr(4, 2, "*** Course ID not found ***")
-                stdscr.addstr(5, 2, "Press any key to continue")
+                stdscr.addstr(table_height + 5, 2, "*** Course ID not found ***")
+                stdscr.addstr(table_height +6, 2, "Press any key to continue")
                 stdscr.refresh()
                 stdscr.getch()
                 stdscr.clear()
+    
+    def add_student_to_course(self, stdscr):
+        stdscr.clear()
+        stdscr.addstr(1, 2, "Add student to course")
+        stdscr.addstr(2, 2, "Course list available: ")
+        course_table = tabulate(self.course_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
+        stdscr.addstr(4, 0, course_table)
+        table_height = 3
+        # find the course id in the course list
+        for i in range(0, len(self.course_list)): 
+            for j in range(0, len(self.course_list[i])):
+                table_height += 1
+        stdscr.addstr(table_height + 3, 2, "Enter course ID: ")
+        id = stdscr.getstr().decode()
+        # print student table
+        stdscr.clear()
+        table_height = 3
+        stdscr.addstr(1, 2, "Student list available: ")
+        student_table = tabulate(self.student_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
+        stdscr.addstr(3, 0, student_table)
+        for i in range(0, len(self.student_list)):
+            for j in range(0, len(self.student_list[i])):
+                table_height += 1
+        stdscr.addstr(table_height + 3, 2, "Enter student ID: ")
+        student_id = stdscr.getstr().decode()
+        stdscr.addstr(table_height + 4, 2, student_id)
+        student_id = student_id.split()
+        student_id.sort()
+        count = 0
+        # check if the student id is in the course list 
+        for i in range(0, len(self.course_list)):
+            if id == self.course_list[i]["ID"]:
+                for j in range(0, len(self.course_list[i])):
+                    if 'Student' in self.course_list[i].keys():
+                        for k in range(0, len(self.course_list[i]['Student'])):
+                            for l in range(0, len(student_id)):
+                                if student_id[l] == self.course_list[i]['Student'][k]:
+                                    stdscr.addstr(table_height + 5, 2, f"Student {student_id[l]} already in course {id}")
+                                    # del student_id[l] # delete the student id that is already in the course
+                                    student_id.remove(student_id[l])
+                                    break
+        for i in range(0, len(self.course_list)):
+            if id == self.course_list[i]["ID"]:
+                for j in range(0, len(student_id)):
+                    for k in range (0, len(self.student_list)):
+                        if student_id[j] == self.student_list[k]["ID"]:
+                            count += 1
+                            break
+                    if count != 0:
+                        if 'Student' in self.course_list[i].keys():
+                            self.course_list[i]['Student'].append(student_id[j])
+                        else:
+                            self.course_list[i]['Student'] = [student_id[j]]
+                        self.course_list[i]['Student'].sort()
+                stdscr.addstr(table_height + 5, 2, f"Student {student_id} added to course {id}")
+        if count == 0:
+            stdscr.addstr(table_height + 8, 2, f"Student {student_id} not found")
+        stdscr.addstr(table_height + 9, 2, "Press any key to continue")
+        stdscr.refresh()
+        stdscr.getch()
+        stdscr.clear()                            
+                    
+    def remove_student_from_course(self, stdscr):
+        stdscr.clear()
+        # print the student list and ask for student id to remove course
+        stdscr.addstr(1, 2, "Remove Course from Student")
+        course_table = tabulate(self.course_list, headers='keys', tablefmt='fancy_grid', stralign='center', numalign='center')
+        stdscr.addstr(4, 0, course_table)
+        table_height = 3
+        for i in range(0, len(self.course_list)): 
+            for j in range(0, len(self.course_list[i])):
+                table_height += 1
+        stdscr.addstr(table_height + 3, 2, "Enter course ID: ")
+        course_id = stdscr.getstr().decode()
+        stdscr.clear()
+        count_course = 0
+        # print "Student list available"
+        for i in range(0, len(self.course_list)):
+            if course_id in self.course_list[i]['ID']:
+                count_course += 1
+                stdscr.addstr(1, 2, "Student list available: ")
+                student_table = tabulate(self.course_list[i]['Student'], headers='Student in course', tablefmt='fancy_grid', stralign='center', numalign='center')
+                stdscr.addstr(3, 0, student_table)
+        if count_course == 0:
+            stdscr.addstr(table_height + 5, 2, f" {course_id} not found")
+        else:
+            table_height = 3
+            for i in range(0, len(self.student_list)):
+                for j in range(0, len(self.student_list[i])):
+                    table_height += 1
+            stdscr.addstr(table_height + 3, 2, "Enter student ID: ")
+            student_id = stdscr.getstr().decode()
+            student_id = student_id.split()
+            student_id.sort()
+            for i in range(0, len(self.course_list)):
+                if course_id in self.course_list[i]['ID']:
+                    for j in range(0, len(student_id)):
+                        if 'Student' in self.course_list[i]:
+                            for k in range(0, len(self.course_list[i]['Student'])):
+                                    if student_id[j] == self.course_list[i]['Student'][k]:
+                                        stdscr.addstr(table_height + 5, 2, f"Student {student_id} removed from course {course_id}")
+                                        self.course_list[i]['Student'].remove(student_id[j])
+                                        break
+        stdscr.addstr(table_height + 6, 2, "Press any key to continue")
+        stdscr.refresh()
+        stdscr.getch()
+        stdscr.clear()
 
     def run(self, stdscr):
             while True:
                 stdscr.clear()
                 curses.noecho()
                 curses.cbreak()
-                rectangle(stdscr, 0, 0, 20, 30)
-                stdscr.addstr(1, 6, "Student Management")
-                stdscr.addstr(3, 2, "1. Create Student")
-                stdscr.addstr(4, 2, "2. Modify Student")
-                stdscr.addstr(5, 2, "3. Print student list")
-                stdscr.addstr(6, 2, "4. Create Course")
-                stdscr.addstr(7, 2, "5. Modify Course")
-                stdscr.addstr(8, 2, "6. Print course list")
-                stdscr.addstr(9, 2, "7. Exit")
-                stdscr.addstr(10, 2, "Enter your choice: ")
+                rectangle(stdscr, 0, 0, 22, 50)
+                # print a line below the title
+                stdscr.addstr(2, 1, "_" * 49)                
+                stdscr.addstr(1, 16, "Student Management")
+                stdscr.addstr(4, 2, "1. Create Student")
+                stdscr.addstr(5, 2, "2. Modify Student")
+                stdscr.addstr(6, 2, "3. Print student list")
+                stdscr.addstr(7, 2, "4. Create Course")
+                stdscr.addstr(8, 2, "5. Modify Course")
+                stdscr.addstr(9, 2, "6. Print course list")
+                stdscr.addstr(10, 2, "7. Add student to course")
+                stdscr.addstr(11, 2, "8. Remove student from course")
+                stdscr.addstr(12, 2, "9. Add mark to student")
+                stdscr.addstr(13, 2, "10. Modify mark of student")
+                stdscr.addstr(14, 2, "11. Print student mark & average in course")
+                stdscr.addstr(15, 2, "12. Print student GPA")
+                stdscr.addstr(16, 2, "13. Print student ranking on GPA")
+                stdscr.addstr(17, 2, "14. Exit")
+                stdscr.addstr(18, 1, "_" * 49)     
+                stdscr.addstr(20, 2, "Enter your choice: ")
                 stdscr.refresh()
                 key = stdscr.getch()
                 if key == ord("1"):
@@ -234,8 +361,29 @@ class StudentManagement(Student, Course):
                     self.modify_course(stdscr)
                 elif key == ord("6"):
                     curses.echo()
-                    self.modify_course(stdscr)
+                    self.print_course(stdscr)
                 elif key == ord("7"):
+                    curses.echo()
+                    self.add_student_to_course(stdscr)
+                elif key == ord("8"):
+                    curses.echo()
+                    self.remove_student_from_course(stdscr)
+                elif key == ord("9"):
+                    curses.echo()
+                    self.add_mark_to_student(stdscr)
+                elif key == ord("10"):
+                    curses.echo()
+                    self.modify_mark_of_student(stdscr)
+                elif key == ord("11"):
+                    curses.echo()
+                    self.print_student_mark_and_average_in_a_course(stdscr)
+                elif key == ord("12"):
+                    curses.echo()
+                    self.print_student_GPA(stdscr)
+                elif key == ord("13"):
+                    curses.echo()
+                    self.print_student_ranking_on_GPA(stdscr)
+                elif key == ord("14"):
                     curses.echo()
                     break
                 else:
