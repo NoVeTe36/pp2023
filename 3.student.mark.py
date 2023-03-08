@@ -169,10 +169,10 @@ class Student_Management(Student, Course):
                             if count_st != 0:
                                 if 'Student: ' in Course.course_list[i].keys():
                                     Course.course_list[i]['Student: '][j].append(student_id[j])
-                                    Course.course_list[i]['Student: '][j].sort()
                                 else:
-                                    Course.course_list[i]['Student: '] = [student_id]
-                                print("Student has been added\n")
+                                    Course.course_list[i]['Student: '] = [student_id[j]]
+                                Course.course_list[i]['Student: '][j].sort()
+                        print("Student has been added\n")
 
                     #add course ID, credits as a dict to student
                     for i in range(0, len(Course.course_list)):
